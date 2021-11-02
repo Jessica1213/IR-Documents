@@ -6,7 +6,8 @@
 
 ## QS 網站資料擷取
 
-由於目前網站不提供便利的資料擷取方式，以下採用 JavaScript 做網頁資料萃取，資料轉為 JSON 格式後，再利用線上 JSON to Excel/CSV 的網站轉為所需檔案。
+由於目前網站不提供便利的資料擷取方式，以下採用 JavaScript 做網頁資料萃取，【NEW】並下載檔案名稱為 "qs_ranking" 的 csv 檔案
+<!-- 資料轉為 JSON 格式後，再利用線上 JSON to Excel/CSV 的網站轉為所需檔案。 -->
 
 目前程式支援 2022 的網頁設計，若未來資料欄位名稱有改，可能須做部分修改
 
@@ -27,23 +28,46 @@
     ``` JavaScript
     var unis= []
     var len = document.getElementById('indicator-tab').getElementsByClassName('_qs-ranking-data-row').length;
+
+    var indicator = document.getElementById('move-all-js').getElementsByClassName('td-wrap'); 
+    var header = ["Rank", "University", "Location"];
+    for(var i=0; i<indicator.length; i+=1) {
+        header.push(indicator[i].textContent);
+    }
+    unis.push(header);
+
     for(var i=0; i<len; i+=1) {
-        var uni = []
+        var uni = [];
         var rank = document.getElementById('ranking-data-load_ind').getElementsByClassName('row ind-row')[i].getElementsByClassName('_univ-rank')[0].innerText;
         var unin = document.getElementById('ranking-data-load_ind').getElementsByClassName('row ind-row')[i].getElementsByClassName('uni-link')[0].innerText;
         var loca = document.getElementById('ranking-data-load_ind').getElementsByClassName('row ind-row')[i].getElementsByClassName('location ')[0].innerText;
         var scorelen = document.getElementById('ranking-data-load_ind').getElementsByClassName('row ind-row')[0].getElementsByClassName('overall-score-span-ind').length; 
-        uni.push(rank);
+        uni.push('"'+rank+'"');
         uni.push(unin);
-        uni.push(loca);
+        uni.push('"'+loca.trim()+'"');
+        
         for(var j=0; j<scorelen; j+=1) {
             var s = document.getElementById('ranking-data-load_ind').getElementsByClassName('row ind-row')[i].getElementsByClassName('overall-score-span-ind')[j].innerText;
             uni.push(s);
         }
-        unis.push(uni);
+        // unis.push(uni);
+        var uu = uni.join(",");
+        unis.push(uu);
     }
-    var res = JSON.stringify(unis);
-    console.log(res);
+
+    var rr = unis.join("\n");
+    // var res = JSON.stringify(unis);
+    // console.log(res);
+    var fileName = "qs_ranking.csv";
+    var blob = new Blob([rr], {
+        type : "application/octet-stream"
+    });
+    var href = URL.createObjectURL(blob);
+    var link = document.createElement("a");
+    document.body.appendChild(link);
+    link.href = href;
+    link.download = fileName;
+    link.click();
     ```
     
     範例畫面
@@ -52,4 +76,6 @@
 3. 將擷取出來的結果，即中括號內的所有資料 `[[ ]]`，兩層中括號都要複製到。
 
 4. 至 [https://json-csv.com/](https://json-csv.com/) 或其他線上資料轉換器 (JSON to Excel/CSV)，將步驟 3 的資料貼上，下載資料即可得到所需資料。
+
+5. 【更新】貼上程式碼之後，可直接開啟 csv 檔案，不必做資料格式轉換。若使用 Excel 開啟 csv 檔案，請用匯入 csv 的方法，避免有相同排名的（= 等號資訊）遺失。
 
