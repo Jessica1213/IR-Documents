@@ -43,7 +43,7 @@
         var loca = document.getElementById('ranking-data-load_ind').getElementsByClassName('row ind-row')[i].getElementsByClassName('location ')[0].innerText;
         var scorelen = document.getElementById('ranking-data-load_ind').getElementsByClassName('row ind-row')[0].getElementsByClassName('overall-score-span-ind').length; 
         uni.push('"'+rank+'"');
-        uni.push(unin);
+        uni.push('"'+unin+'"');
         uni.push('"'+loca.trim()+'"');
         
         for(var j=0; j<scorelen; j+=1) {
