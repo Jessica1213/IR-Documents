@@ -1,6 +1,6 @@
 # QS Ranking
 
-&copy; 陳沛均 Jessica，校務研究辦公室資料工程師，最新更新日期 2021/11
+&copy; 陳沛均 Jessica，校務研究辦公室資料工程師，最新更新日期 2022/06
 
 此文件說明 QS Ranking 資料整理相關說明
 
